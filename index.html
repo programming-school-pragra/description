@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>アプリを渡せる形にする手順書</title>
+<style>
+  :root {
+    --paper: #fbfaf7;
+    --card: #ffffff;
+    --ink: #2b2f3a;
+    --ink-soft: #5c6270;
+    --line: #e3e1da;
+    --accent: #4a5fa5;
+    --accent-soft: #eef1f9;
+    --warn-bg: #fdf6e7;
+    --warn-line: #e8c877;
+    --warn-ink: #7a5b17;
+    --ok: #3d8a5f;
+    --screen-bg: #f2f1ee;
+    --screen-chrome: #dcdae2;
+    --mark: #d6604d;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #1d2026;
+      --card: #262a32;
+      --ink: #e8e9ec;
+      --ink-soft: #a6abb8;
+      --line: #3a3f4a;
+      --accent: #8ea2e0;
+      --accent-soft: #2e3444;
+      --warn-bg: #332b18;
+      --warn-line: #8a6d2a;
+      --warn-ink: #e5c87a;
+      --ok: #6fbf94;
+      --screen-bg: #1a1c21;
+      --screen-chrome: #34384220;
+      --mark: #e07b6a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1d2026;
+    --card: #262a32;
+    --ink: #e8e9ec;
+    --ink-soft: #a6abb8;
+    --line: #3a3f4a;
+    --accent: #8ea2e0;
+    --accent-soft: #2e3444;
+    --warn-bg: #332b18;
+    --warn-line: #8a6d2a;
+    --warn-ink: #e5c87a;
+    --ok: #6fbf94;
+    --screen-bg: #1a1c21;
+    --screen-chrome: #34384220;
+    --mark: #e07b6a;
+  }
+  :root[data-theme="light"] {
+    --paper: #fbfaf7;
+    --card: #ffffff;
+    --ink: #2b2f3a;
+    --ink-soft: #5c6270;
+    --line: #e3e1da;
+    --accent: #4a5fa5;
+    --accent-soft: #eef1f9;
+    --warn-bg: #fdf6e7;
+    --warn-line: #e8c877;
+    --warn-ink: #7a5b17;
+    --ok: #3d8a5f;
+    --screen-bg: #f2f1ee;
+    --screen-chrome: #dcdae2;
+    --mark: #d6604d;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Yu Gothic UI", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+    font-size: 17px;
+    line-height: 1.9;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 20px 80px;
+  }
+  header.top {
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 24px;
+    margin-bottom: 12px;
+  }
+  .eyebrow {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    margin: 0 0 8px;
+  }
+  h1 {
+    font-size: 30px;
+    line-height: 1.4;
+    margin: 0 0 12px;
+    text-wrap: balance;
+  }
+  .lede {
+    color: var(--ink-soft);
+    margin: 0;
+    font-size: 15.5px;
+  }
+  .goal {
+    background: var(--accent-soft);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 24px 0 40px;
+    font-size: 15.5px;
+  }
+  .goal strong { color: var(--accent); }
+
+  .step {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 28px 28px 24px;
+    margin-bottom: 28px;
+  }
+  .step-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 6px;
+  }
+  .step-num {
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .step h2 {
+    font-size: 21px;
+    margin: 0;
+    line-height: 1.5;
+  }
+  .step p { margin: 10px 0; }
+  .fig {
+    background: var(--screen-bg);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    margin: 18px 0 10px;
+    padding: 14px;
+    overflow-x: auto;
+  }
+  .fig svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+  .fig-cap {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    margin: 6px 2px 0;
+  }
+  .kbd {
+    display: inline-block;
+    background: var(--accent-soft);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 0 8px;
+    font-weight: 700;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  .note {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-line);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 16px 0 0;
+    font-size: 15px;
+  }
+  .note b { color: var(--warn-ink); }
+  .ok-line {
+    color: var(--ok);
+    font-weight: 700;
+  }
+  .qa {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-top: 44px;
+  }
+  .qa h2 {
+    font-size: 19px;
+    margin: 0 0 4px;
+    color: var(--accent);
+  }
+  .qa dt {
+    font-weight: 700;
+    margin-top: 18px;
+  }
+  .qa dd {
+    margin: 4px 0 0;
+    color: var(--ink-soft);
+    font-size: 15.5px;
+  }
+  footer {
+    margin-top: 40px;
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">作業手順書</p>
+    <h1>作ったアプリを、渡せる形にして動かすまで</h1>
+    <p class="lede">Visual Studio(ビジュアルスタジオ)というソフトで作ったアプリを、完成版として書き出し、フォルダごとコピーして、実際に起動するまでの手順です。全部で6ステップ、所要時間はだいたい10分です。</p>
+  </header>
+
+  <div class="goal">
+    <strong>ゴール:</strong> 「Release(リリース)」という完成版を作る → できあがったフォルダをコピーする → 中の <b>.exe ファイル</b>(アプリ本体)をダブルクリックして起動する
+  </div>
+
+  <!-- STEP 1 -->
+  <section class="step">
+    <div class="step-head">
+      <div class="step-num">1</div>
+      <h2>Visual Studio でプロジェクトを開く</h2>
+    </div>
+    <p>デスクトップまたはスタートメニューから紫色のアイコンの <b>Visual Studio</b> を起動します。開いたら「最近開いた項目」に目的のプロジェクト名があるので、それをクリックします。</p>
+    <div class="fig">
+      <svg viewBox="0 0 560 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Visual Studioの起動画面のイメージ">
+        <rect x="0" y="0" width="560" height="150" rx="8" fill="#ffffff" stroke="#cccccc"/>
+        <rect x="0" y="0" width="560" height="34" rx="8" fill="#5c2d91"/>
+        <text x="16" y="23" font-size="14" fill="#ffffff" font-weight="bold">Visual Studio</text>
+        <text x="24" y="62" font-size="13" fill="#333333" font-weight="bold">最近開いた項目</text>
+        <rect x="24" y="74" width="380" height="30" rx="4" fill="#efe9f5" stroke="#5c2d91"/>
+        <text x="36" y="94" font-size="13" fill="#333333">📁 (プロジェクト名).sln</text>
+        <text x="418" y="94" font-size="12" fill="#b03a2e" font-weight="bold">← これをクリック</text>
+        <rect x="24" y="110" width="380" height="26" rx="4" fill="#f5f5f5"/>
+      </svg>
+      <p class="fig-cap">起動画面の左側に、最近使ったプロジェクトの一覧が出ます。</p>
+    </div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="step">
+    <div class="step-head">
+      <div class="step-num">2</div>
+      <h2>「Debug」を「Release」に切り替える</h2>
+    </div>
+    <p>画面の上のほうに <b>「Debug」と書かれた小さな選択ボックス</b>があります(緑色の▶ボタンの左あたり)。ここをクリックして <b>「Release」</b> に変えてください。</p>
+    <p style="font-size:15px; color: var(--ink-soft);">Debug は「作業中の仮の版」、Release は「人に渡す完成版」という意味です。</p>
+    <div class="fig">
+      <svg viewBox="0 0 560 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ツールバーでDebugをReleaseに切り替えるイメージ">
+        <rect x="0" y="0" width="560" height="40" fill="#eeeeee" stroke="#cccccc"/>
+        <rect x="14" y="8" width="110" height="24" rx="3" fill="#ffffff" stroke="#999999"/>
+        <text x="24" y="25" font-size="13" fill="#333333">Any CPU</text>
+        <rect x="136" y="8" width="110" height="24" rx="3" fill="#fff4f2" stroke="#b03a2e" stroke-width="2"/>
+        <text x="146" y="25" font-size="13" fill="#333333" font-weight="bold">Debug ▾</text>
+        <polygon points="262,20 282,12 282,28" fill="#2e7d32"/>
+        <text x="292" y="25" font-size="13" fill="#333333">(プロジェクト名)</text>
+        <rect x="136" y="48" width="110" height="56" rx="3" fill="#ffffff" stroke="#999999"/>
+        <rect x="136" y="76" width="110" height="28" fill="#dce6f7"/>
+        <text x="146" y="67" font-size="13" fill="#666666">Debug</text>
+        <text x="146" y="95" font-size="13" fill="#1a3e7a" font-weight="bold">Release ✓</text>
+        <text x="262" y="95" font-size="12" fill="#b03a2e" font-weight="bold">← クリックして Release を選ぶ</text>
+      </svg>
+      <p class="fig-cap">▾を押すと2つ出てくるので、下の「Release」を選びます。</p>
+    </div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="step">
+    <div class="step-head">
+      <div class="step-num">3</div>
+      <h2>完成版を作る(ビルドする)</h2>
+    </div>
+    <p>画面いちばん上のメニューから <span class="kbd">ビルド</span> をクリックし、出てきた一覧の <span class="kbd">ソリューションのビルド</span> をクリックします。</p>
+    <p>数十秒待つと、画面の下のほうに <span class="ok-line">「ビルド: 1 正常終了」</span> と表示されます。これが「完成版ができました」の合図です。</p>
+    <div class="fig">
+      <svg viewBox="0 0 560 170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ビルドメニューと成功メッセージのイメージ">
+        <rect x="0" y="0" width="560" height="28" fill="#eeeeee" stroke="#cccccc"/>
+        <text x="14" y="19" font-size="13" fill="#333333">ファイル　編集　表示</text>
+        <rect x="152" y="2" width="52" height="24" rx="3" fill="#dce6f7" stroke="#4a5fa5"/>
+        <text x="160" y="19" font-size="13" fill="#1a3e7a" font-weight="bold">ビルド</text>
+        <text x="214" y="19" font-size="13" fill="#333333">デバッグ　ツール</text>
+        <rect x="152" y="30" width="230" height="34" rx="3" fill="#ffffff" stroke="#999999"/>
+        <rect x="152" y="30" width="230" height="34" fill="#dce6f7"/>
+        <text x="164" y="52" font-size="13" fill="#1a3e7a" font-weight="bold">ソリューションのビルド</text>
+        <text x="394" y="52" font-size="12" fill="#b03a2e" font-weight="bold">← これをクリック</text>
+        <rect x="0" y="110" width="560" height="56" fill="#ffffff" stroke="#cccccc"/>
+        <text x="14" y="130" font-size="12" fill="#666666">出力</text>
+        <text x="14" y="152" font-size="13" fill="#2e7d32" font-weight="bold">========== ビルド: 1 正常終了、0 失敗 ==========</text>
+      </svg>
+      <p class="fig-cap">下の「出力」欄に「1 正常終了」と出ればOKです。</p>
+    </div>
+    <div class="note"><b>「失敗」と出たら:</b> そのまま進めず、作った本人か詳しい人に「ビルドが失敗した」と伝えてください。</div>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="step">
+    <div class="step-head">
+      <div class="step-num">4</div>
+      <h2>できあがったフォルダを開く</h2>
+    </div>
+    <p>画面右側の「ソリューション エクスプローラー」という欄で、<b>プロジェクト名を右クリック</b>し、<span class="kbd">エクスプローラーでフォルダーを開く</span> を選びます。</p>
+    <p>フォルダが開いたら、そこから <b>bin → Release</b> と順にダブルクリックで入っていきます。「net8.0-windows」のような名前のフォルダがもう1つある場合は、その中まで入ってください。</p>
+    <div class="fig">
+      <svg viewBox="0 0 560 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="フォルダの階層のイメージ">
+        <rect x="0" y="0" width="560" height="150" rx="8" fill="#ffffff" stroke="#cccccc"/>
+        <text x="20" y="34" font-size="14" fill="#333333">📁 (プロジェクトのフォルダ)</text>
+        <text x="48" y="62" font-size="14" fill="#333333">📁 bin</text>
+        <text x="76" y="90" font-size="14" fill="#1a3e7a" font-weight="bold">📁 Release　← 目的地はここ!</text>
+        <text x="104" y="118" font-size="14" fill="#333333">📁 net8.0-windows(ある場合はこの中まで)</text>
+        <line x1="30" y1="40" x2="30" y2="56" stroke="#999999"/>
+        <line x1="30" y1="56" x2="44" y2="56" stroke="#999999"/>
+        <line x1="58" y1="68" x2="58" y2="84" stroke="#999999"/>
+        <line x1="58" y1="84" x2="72" y2="84" stroke="#999999"/>
+        <line x1="86" y1="96" x2="86" y2="112" stroke="#999999"/>
+        <line x1="86" y1="112" x2="100" y2="112" stroke="#999999"/>
+      </svg>
+      <p class="fig-cap">bin(ビン)フォルダの中に Release(リリース)フォルダがあります。</p>
+    </div>
+  </section>
+
+  <!-- STEP 5 -->
+  <section class="step">
+    <div class="step-head">
+      <div class="step-num">5</div>
+      <h2>Release フォルダを「まるごと」コピーする</h2>
+    </div>
+    <p><b>Release フォルダそのものを右クリック → コピー</b>して、渡したい場所(USBメモリ、デスクトップ、共有フォルダなど)に貼り付けます。</p>
+    <div class="note"><b>いちばん大事な注意:</b> フォルダの中の .exe ファイル<b>だけ</b>をコピーしてはいけません。まわりにあるファイル(.dll など)はアプリを動かす部品です。部品が欠けるとアプリは起動しません。<b>必ずフォルダごと</b>コピーしてください。</div>
+    <div class="fig">
+      <svg viewBox="0 0 560 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="フォルダごとコピーする図">
+        <rect x="20" y="20" width="200" height="100" rx="8" fill="#fdf9ee" stroke="#c9a94e"/>
+        <text x="40" y="46" font-size="14" fill="#333333" font-weight="bold">📁 Release</text>
+        <text x="52" y="70" font-size="12" fill="#555555">📄 アプリ名.exe</text>
+        <text x="52" y="88" font-size="12" fill="#555555">📄 〇〇.dll(たくさん)</text>
+        <text x="52" y="106" font-size="12" fill="#555555">📄 設定ファイル など</text>
+        <text x="248" y="76" font-size="22" fill="#4a5fa5" font-weight="bold">→ コピー →</text>
+        <rect x="370" y="20" width="170" height="100" rx="8" fill="#eef6ef" stroke="#3d8a5f"/>
+        <text x="388" y="50" font-size="13" fill="#333333">💾 USBメモリや</text>
+        <text x="388" y="72" font-size="13" fill="#333333">🖥️ 相手のパソコンへ</text>
+        <text x="388" y="100" font-size="12" fill="#2e7d32" font-weight="bold">フォルダごと貼り付け</text>
+      </svg>
+      <p class="fig-cap">箱(フォルダ)ごと渡すイメージです。中身をバラして渡すと動きません。</p>
+    </div>
+  </section>
+
+  <!-- STEP 6 -->
+  <section class="step">
+    <div class="step-head">
+      <div class="step-num">6</div>
+      <h2>アプリを起動する</h2>
+    </div>
+    <p>コピーした Release フォルダを開き、中にある <b>「アプリ名.exe」をダブルクリック</b>します。アプリの画面が開けば完了です!</p>
+    <p style="font-size:15px; color: var(--ink-soft);">ファイルがたくさんあって見つけにくいときは、「種類」の列が<b>「アプリケーション」</b>になっているものが本体です。</p>
+    <div class="fig">
+      <svg viewBox="0 0 560 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="exeファイルをダブルクリックする図">
+        <rect x="0" y="0" width="560" height="130" rx="8" fill="#ffffff" stroke="#cccccc"/>
+        <text x="20" y="30" font-size="12" fill="#666666">名前　　　　　　　　　　　　　　　種類</text>
+        <rect x="14" y="40" width="420" height="28" rx="4" fill="#dce6f7" stroke="#4a5fa5" stroke-width="2"/>
+        <text x="24" y="59" font-size="13" fill="#1a3e7a" font-weight="bold">🚃 アプリ名.exe</text>
+        <text x="250" y="59" font-size="12" fill="#1a3e7a">アプリケーション</text>
+        <text x="446" y="59" font-size="12" fill="#b03a2e" font-weight="bold">← ダブルクリック!</text>
+        <text x="24" y="90" font-size="13" fill="#777777">📄 〇〇.dll</text>
+        <text x="250" y="90" font-size="12" fill="#999999">DLL ファイル</text>
+        <text x="24" y="114" font-size="13" fill="#777777">📄 アプリ名.runtimeconfig.json</text>
+        <text x="250" y="114" font-size="12" fill="#999999">JSON ファイル</text>
+      </svg>
+      <p class="fig-cap">「.exe」が見えない設定のパソコンもあります。その場合は「種類: アプリケーション」を目印に。</p>
+    </div>
+  </section>
+
+  <!-- こんなときは -->
+  <section class="qa">
+    <h2>こんな画面が出たら</h2>
+    <dl>
+      <dt>「WindowsによってPCが保護されました」という青い画面が出た</dt>
+      <dd>知らないアプリを初めて起動するときの標準の確認画面です。<b>「詳細情報」→「実行」</b>の順にクリックすれば起動します。</dd>
+      <dt>「.NET のインストールが必要です」のような画面が出た</dt>
+      <dd>アプリを動かすための土台ソフトがそのパソコンに入っていません。画面に表示されるリンクをクリックしてインストール(無料)してから、もう一度 .exe をダブルクリックしてください。</dd>
+      <dt>ダブルクリックしても何も起きない</dt>
+      <dd>フォルダごとコピーできているか確認してください(.exe だけコピーすると起動しません)。それでもダメなら作った本人に連絡を。</dd>
+    </dl>
+  </section>
+
+  <footer>作成日: 2026年7月22日</footer>
+</div>
+
+</body>
+</html>
